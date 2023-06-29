@@ -65,10 +65,10 @@ namespace Druware.Server.Controllers
         }
 
         [HttpPost("")]
-        public async Task<ActionResult<Result>> Login([FromBody] LoginModel model)
+        public async Task<ActionResult<User>> Login([FromBody] LoginModel model)
         {
             var user = await UserManager.FindByNameAsync(model.UserName);
-            if (user == null) return Ok(Result.Error("Acocunt Not Found"));
+            if (user == null) return Ok(Result.Error("Account Not Found"));
 
             var result = await SignInManager.PasswordSignInAsync(user, model.Password, false, false);
 
@@ -78,7 +78,7 @@ namespace Druware.Server.Controllers
             if (!result.Succeeded) return Ok(Result.Error("Account Not Found"));
 
             // All done
-            return Ok(Result.Ok("Logged In"));
+            return Ok(user);
         }
 
         [HttpDelete("")]
