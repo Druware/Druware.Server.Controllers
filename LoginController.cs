@@ -56,7 +56,7 @@ namespace Druware.Server.Controllers
         {
             User? user = await Entities.User.ByName(this.User.Identity?.Name, UserManager);
             if (user == null) return Ok(Result.Error("Unable to find User"));
-            if (user.IsSesionExpired())
+            if (user.IsSessionExpired())
                 await SignInManager.SignOutAsync();
 
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
