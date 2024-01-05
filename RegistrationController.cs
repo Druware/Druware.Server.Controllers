@@ -18,7 +18,6 @@
  *    All Rights Reserved
  */
 
-using System;
 using AutoMapper;
 using Druware.Server.Entities;
 using Druware.Server.Models;
@@ -29,7 +28,6 @@ using Microsoft.Extensions.Configuration;
 using System.Reflection;
 using System.Web;
 using Microsoft.AspNetCore.Routing;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace Druware.Server.Controllers
 {
@@ -38,7 +36,7 @@ namespace Druware.Server.Controllers
     public class RegistrationController : CustomController
     {
         private readonly IMapper _mapper;
-        private readonly ApplicationSettings _settings;
+        private readonly AppSettings _settings;
 
         public RegistrationController(
             IConfiguration configuration,
@@ -48,7 +46,7 @@ namespace Druware.Server.Controllers
             ServerContext context)
             : base(configuration, userManager, signInManager, context)
         {
-            _settings = new ApplicationSettings(Configuration);
+            _settings = new AppSettings(Configuration);
             _mapper = mapper;
         }
 
@@ -59,8 +57,33 @@ namespace Druware.Server.Controllers
         /// <returns></returns>
         [HttpGet]
         public IActionResult GetEmptyModel() =>
-            Ok(new Models.UserRegistrationModel());
+            Ok(new UserRegistrationModel());
+        
+        /// <summary>
+        /// A quick and easy way to update the access log
+        /// </summary>
+        private async Task UpdateAccessLog(string how, string? who = null, string? message = null)
+        {
+            var data = HttpContext.GetRouteData();
+            var what =
+                $"{data.Values["controller"]?.ToString() ?? ""}.{data.Values["action"]?.ToString() ?? ""}";
+            what += message ?? "";
 
+            var where = HttpContext.Connection.RemoteIpAddress.ToString();
+            Access access = new()
+            {
+                Who = who ?? "none",
+                When = DateTime.UtcNow,
+                What = what,
+                How = how,
+                Where = where
+            };
+
+            ServerContext.AccessLog.Add(access);
+
+            await ServerContext.SaveChangesAsync();
+        }
+        
         /// <summary>
         /// Confirms an email after a registration
         /// </summary>
@@ -70,26 +93,15 @@ namespace Druware.Server.Controllers
         [HttpGet("confirm")]
         public async Task<ActionResult<Result>> ConfirmEmail([FromQuery] string token, [FromQuery] string email)
         {
-            RouteData data = HttpContext.GetRouteData();
-            string? what = string.Format("{0}.{1}",
-                data.Values["controller"]?.ToString() ?? "",
-                data.Values["action"]?.ToString() ?? "");
-
-            string? where = HttpContext.Connection.RemoteIpAddress.ToString();
-            Access access = new();
-            access.Who = "none";
-            access.When = DateTime.UtcNow;
-            access.What = what;
-            access.How = "POST";
-            access.Where = where;
-
-            ServerContext.AccessLog.Add(access);
-            await ServerContext.SaveChangesAsync();
-
+            // await UpdateAccessLog("GET"); 
             // Confirm the Email
             var user = await UserManager.FindByEmailAsync(email);
             if (user == null)
+            {
+                await UpdateAccessLog("GET", "Unknown", "User Not Found"); 
                 return Ok(Result.Error("Cannot Confirm this Account"));
+            }
+
             var result = await UserManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
@@ -97,12 +109,14 @@ namespace Druware.Server.Controllers
                 await UserManager.AddToRoleAsync(user, UserSecurityRole.Confirmed.ToUpper());
                 if (UserManager.Users.Count() == 1)
                     await UserManager.AddToRoleAsync(user, UserSecurityRole.SystemAdministrator.ToUpper());
+                await UpdateAccessLog("GET", user.NormalizedUserName); 
                 return Ok(Result.Ok("Account Confirmed"));
             }
 
             var errorResult = Result.Error("Cannot Confirm this Account");
             foreach (var error in result.Errors)
                 errorResult.Info?.Add(error.Description);
+            await UpdateAccessLog("GET", user.NormalizedUserName, errorResult.ToString()); 
             return Ok(errorResult);
         }
 
@@ -118,36 +132,19 @@ namespace Druware.Server.Controllers
         public async Task<ActionResult<Result>> Register(
             [FromBody] UserRegistrationModel model)
         {
-            // Add an access log entry to track registrations
-
-            // get the route for the 'Where', and the method for the 'How'
-            RouteData data = HttpContext.GetRouteData();
-            string? what = string.Format("{0}.{1}",
-                data.Values["controller"]?.ToString() ?? "",
-                data.Values["action"]?.ToString() ?? "");
-
-            string? where = HttpContext.Connection.RemoteIpAddress.ToString();
-            Access access = new();
-            access.Who = "none";
-            access.When = DateTime.UtcNow;
-            access.What = what;
-            access.How = "POST";
-            access.Where = where;
-
-            ServerContext.AccessLog.Add(access);
-            await ServerContext.SaveChangesAsync();
+            await UpdateAccessLog("POST");
 
             if (_settings.Smtp == null) throw new Exception("Mail Services Not  Configured");
 
             if (!ModelState.IsValid)
-                return Ok(Result.Error("Invalid Model Recieved"));
+                return Ok(Result.Error("Invalid Model Received"));
 
             var user = _mapper.Map<User>(model);
 
             var result = await UserManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
-                Result errorResult = Result.Error("Unable to create user.");
+                var errorResult = Result.Error("Unable to create user.");
                 foreach (var error in result.Errors)
                     errorResult.Info?.Add(error.Description);
                 return Ok(errorResult);
@@ -171,8 +168,8 @@ namespace Druware.Server.Controllers
             if (_settings.Notification == null)
                 return Ok(Result.Error("Settings Not Found"));
 
-            MailHelper helper = new MailHelper(_settings.Smtp, Assembly.GetEntryAssembly()!.GetName()!.Name!);
-            helper.Send(
+            var helper = new MailHelper(_settings.Smtp, Assembly.GetEntryAssembly()!.GetName()!.Name!);
+            helper.SendAsync(
                 user.Email,
                 _settings.Notification!.From!,
                 _settings.Notification!.From!,
@@ -183,7 +180,7 @@ namespace Druware.Server.Controllers
             await UserManager.AddToRoleAsync(user, UserSecurityRole.Unconfirmed.ToUpper());
 
 #if DEBUG
-            return Ok(Result.Ok(string.Format("{0}", HttpUtility.UrlEncode(token))));
+            return Ok(Result.Ok($"{HttpUtility.UrlEncode(token)}"));
 #else
             return Ok(Result.Ok("User Created, limited to Visitor Status Until Confirmed."));
 #endif

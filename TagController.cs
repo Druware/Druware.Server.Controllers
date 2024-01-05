@@ -13,27 +13,17 @@
  * You should have received a copy of the GNU General Public License along with 
  * the Druware.Server API Library. If not, see <https://www.gnu.org/licenses/>.
  * 
- * Copyright 2019-2023 by:
- *    Andy 'Dru' Satori @ Satori & Associates, Inc.
+ * Copyright 2019-2024 by:
+ *    Andy 'Dru' Satori @ Druware Software Designs
  *    All Rights Reserved
  */
 
-using System;
-using System.Reflection;
-using System.Web;
-using System.Xml.Linq;
-using AutoMapper;
 using Druware.Server.Entities;
-using Druware.Server.Models;
 using RESTfulFoundation.Server;
-using MailKit.Search;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Druware.Server;
-
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace Druware.Server.Controllers
 {
@@ -44,61 +34,41 @@ namespace Druware.Server.Controllers
     [Route("api/[controller]")]
     public class TagController : CustomController
     {
-        private readonly IMapper _mapper;
-        private readonly ApplicationSettings _settings;
-
         public TagController(
             IConfiguration configuration,
-            IMapper mapper,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ServerContext context)
             : base(configuration, userManager, signInManager, context)
-        {
-            _settings = new ApplicationSettings(Configuration);
-            _mapper = mapper;
-        }
+        { }
 
         // get - get a list of all the article, with count and offset built in
         [HttpGet("")]
         public IActionResult GetList([FromQuery] int page = 0, [FromQuery] int count = 1000)
         {
-            if (ServerContext.Tags == null) return Ok(Result.Ok("No Data Available")); // think I want to alter this to not need the Ok()
-
-            var total = ServerContext.Tags?.Count() ?? 0;
-            var list = ServerContext.Tags?
+            var total = ServerContext.Tags.Count();
+            var list = ServerContext.Tags
                 .OrderBy(a => a.Name)
                 .Skip(page * count)
                 .Take(count)
                 .ToList();
-            if (list == null)
-            {
-                return Ok(ListResult.Error("No List Returned"));
-            }
-            ListResult result = ListResult.Ok(list, total, 0, 1000);
-            return Ok(result);
+            return Ok(ListResult.Ok(list, total, 0, 1000));
         }
 
         [HttpGet("{value}")]
-        public IActionResult GetTag(string value)
-        {
-            Tag? tag = Tag.ByNameOrId(ServerContext, value);
-            return (tag != null) ? Ok(tag) : BadRequest("Not Found");
-        }
+        public IActionResult GetTag(string value) =>
+            Ok(Tag.ByNameOrId(ServerContext, value));
         
         [HttpPost("")]
         [Authorize(Roles = UserSecurityRole.Confirmed)]
         public async Task<ActionResult<Tag>> Add(
             [FromBody] Tag model)
         {
-            ActionResult? r = await UpdateUserAccess();
+            var r = await UpdateUserAccess();
             if (r != null) return r;
 
             if (!ModelState.IsValid)
-                return Ok(Result.Error("Invalid Model Recieved"));
-
-            if (ServerContext.Tags == null)
-                return Ok(Result.Ok("No Data Available")); // think I want to alter this to not need the Ok()
+                return Ok(Result.Error("Invalid Model Received"));
 
             ServerContext.Tags.Add(model);
             await ServerContext.SaveChangesAsync();
@@ -110,19 +80,18 @@ namespace Druware.Server.Controllers
         [Authorize(Roles = UserSecurityRole.ManagerOrSystemAdministrator)]
         public async Task<IActionResult> DeleteObject(string value)
         {
-            ActionResult? r = await UpdateUserAccess();
+            var r = await UpdateUserAccess();
             if (r != null) return r;
 
-            Tag? tag = Tag.ByNameOrId(ServerContext, value);
-            if (tag == null) return BadRequest("Not Found");
+            var tag = Tag.ByNameOrId(ServerContext, value);
 
             // now that we have an entity, we will need to check if it is
-            // referenced from other entities, like artictles, but we are not
+            // referenced from other entities, like articles, but we are not
             // there yet.
             // ... Dru 2022.11.02
 
             ServerContext.Tags.Remove(tag);
-            ServerContext.SaveChanges();
+            await ServerContext.SaveChangesAsync();
 
             // Should rework the save to return a success of fail on the delete
             return Ok(Result.Ok("Delete Successful"));

@@ -37,7 +37,7 @@ namespace Druware.Server.Controllers
     public class LoginController : CustomController
     {
         private readonly IMapper _mapper;
-        private readonly ApplicationSettings _settings;
+        private readonly AppSettings _settings;
 
         public LoginController(
             IConfiguration configuration,
@@ -47,13 +47,16 @@ namespace Druware.Server.Controllers
             ServerContext context)
             : base(configuration, userManager, signInManager, context)
         {
-            _settings = new ApplicationSettings(Configuration);
+            _settings = new AppSettings(Configuration);
             _mapper = mapper;
         }
 
         [HttpGet("")]
         public async Task<IActionResult> Validate()
         {
+            if (User.Identity == null)
+                return Ok(Result.Error("No User Logged In"));
+            
             User? user = await Entities.User.ByName(this.User.Identity?.Name, UserManager);
             if (user == null) return Ok(Result.Error("Unable to find User"));
             if (user.IsSessionExpired())

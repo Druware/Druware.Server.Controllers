@@ -12,25 +12,19 @@ namespace Druware.Server.Controllers
         [HttpGet("encode/{value}")]
         public ActionResult<Result> Encrypt(string value)
         {
-            return (Assembly.GetEntryAssembly()?.GetName()?.Name == null) ?
+            return (Assembly.GetEntryAssembly()?.GetName().Name == null) ?
                 Ok(Result.Error("No Assembly Found")) :
-                Ok(Result.Ok(value.Encrypt(Assembly.GetEntryAssembly()!.GetName()!.Name!)));
+                Ok(Result.Ok(value.Encrypt(Assembly.GetEntryAssembly()!.GetName().Name!)));
         }
-
-        [HttpGet("up")]
-        public ActionResult<Result> IsOn()
-        {
-            return Ok(Result.Ok("Server is on, but not on fire"));
-        }
-
+        
         [HttpGet("")]
         public ActionResult<ListResult> Utilities()
         {
-            List<string> endPoints = new();
-            endPoints.Add("/ - this list");
-            endPoints.Add("/up - isServerUp");
-            endPoints.Add("/encode/{value} - getEncodedValue");
-
+            List<string> endPoints = new()
+            {
+                "/ - this list",
+                "/encode/{value} - getEncodedValue"
+            };
             return Ok(ListResult.Ok(endPoints));
         }
     }

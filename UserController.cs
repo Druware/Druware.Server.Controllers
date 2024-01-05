@@ -43,7 +43,7 @@ namespace Druware.Server.Controllers
         private readonly IMapper _mapper;
         private readonly RoleManager<Role> _roleManager;
 
-        private readonly ApplicationSettings _settings;
+        private readonly AppSettings _settings;
 
         public UserController(
             IConfiguration configuration,
@@ -54,7 +54,7 @@ namespace Druware.Server.Controllers
             ServerContext context)
             : base(configuration, userManager, signInManager, context)
         {
-            _settings = new ApplicationSettings(Configuration);
+            _settings = new AppSettings(Configuration);
             _mapper = mapper;
             _roleManager = roleManager;
         }
