@@ -37,6 +37,7 @@ using Microsoft.AspNetCore.Routing;
 namespace Druware.Server.Controllers
 {
     [Route("api/[controller]")]
+    [Route("[controller]")]
     public class UserController : CustomController
     {
         // private readonly IConfiguration _configuration;

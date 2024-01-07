@@ -34,6 +34,7 @@ namespace Druware.Server.Controllers
 {
 
     [Route("api/[controller]")]
+    [Route("[controller]")]
     public class LoginController : CustomController
     {
         private readonly IMapper _mapper;

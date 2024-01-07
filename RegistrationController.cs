@@ -33,6 +33,7 @@ namespace Druware.Server.Controllers
 {
 
     [Route("api/[controller]")]
+    [Route("[controller]")]
     public class RegistrationController : CustomController
     {
         private readonly IMapper _mapper;
