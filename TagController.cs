@@ -61,20 +61,27 @@ namespace Druware.Server.Controllers
             Ok(Tag.ByNameOrId(ServerContext, value));
         
         [HttpPost("")]
+        [HttpPut("{value}")]
         [Authorize(Roles = UserSecurityRole.Confirmed)]
         public async Task<ActionResult<Tag>> Add(
-            [FromBody] Tag model)
+            [FromBody] Tag model, string? value)
         {
             var r = await UpdateUserAccess();
             if (r != null) return r;
 
             if (!ModelState.IsValid)
                 return Ok(Result.Error("Invalid Model Received"));
+            if (model.Name == null) return BadRequest("No name provided");
+            
+            var tag = Tag.ByNameOrId(ServerContext, value ?? model.Name!);
+            if (value == null && tag.TagId > 0) return tag;
 
-            ServerContext.Tags.Add(model);
+            tag.Name = model.Name!;
+            
+            if (tag.TagId is null or < 1) ServerContext.Tags.Add(model);
             await ServerContext.SaveChangesAsync();
 
-            return Ok(model);
+            return Ok(Tag.ByNameOrId(ServerContext, model.Name!));
         }
 
         [HttpDelete("{value}")]
