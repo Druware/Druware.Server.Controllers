@@ -31,7 +31,6 @@ using System.Web;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Routing;
 
 namespace Druware.Server.Controllers
