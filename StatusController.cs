@@ -6,7 +6,7 @@ using System.Reflection;
 namespace Druware.Server.Controllers
 {
     [Route("api/[controller]")]
-    [Route("[controller]")]
+    //[Route("[controller]")]
     public class StatusController : ControllerBase
     {
         [HttpGet("")]

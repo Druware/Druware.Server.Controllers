@@ -33,7 +33,7 @@ namespace Druware.Server.Controllers
 {
 
     [Route("api/[controller]")]
-    [Route("[controller]")]
+    //[Route("[controller]")]
     public class RegistrationController : CustomController
     {
         private readonly IMapper _mapper;
@@ -168,7 +168,9 @@ namespace Druware.Server.Controllers
                 return Ok(Result.Error("Assembly Not Found"));
             if (_settings.Notification == null)
                 return Ok(Result.Error("Settings Not Found"));
-
+            
+            Console.WriteLine(link);
+            
             var helper = new MailHelper(_settings.Smtp, Assembly.GetEntryAssembly()!.GetName()!.Name!);
             helper.SendAsync(
                 user.Email,
