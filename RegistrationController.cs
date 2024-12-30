@@ -142,7 +142,9 @@ namespace Druware.Server.Controllers
 
             var user = _mapper.Map<User>(model);
 
-            var result = await UserManager.CreateAsync(user, model.Password);
+            if (model.Password == null) return Ok(Result.Error("Password is required"));
+
+            var result = await UserManager.CreateAsync(user, model.Password!);
             if (!result.Succeeded)
             {
                 var errorResult = Result.Error("Unable to create user.");
@@ -170,15 +172,19 @@ namespace Druware.Server.Controllers
                 return Ok(Result.Error("Settings Not Found"));
             
             Console.WriteLine(link);
+            #if DEBUG
+            Console.WriteLine(Assembly.GetEntryAssembly()!.GetName()!.Name!);
+            #endif
             
             var helper = new MailHelper(_settings.Smtp, Assembly.GetEntryAssembly()!.GetName()!.Name!);
-            helper.SendAsync(
+            await helper.SendAsync(
                 user.Email,
                 _settings.Notification!.From!,
                 _settings.Notification!.From!,
                 "Confirmation email link",
                 link!
             );
+            Console.WriteLine("Mail Sent");
 
             await UserManager.AddToRoleAsync(user, UserSecurityRole.Unconfirmed.ToUpper());
 
