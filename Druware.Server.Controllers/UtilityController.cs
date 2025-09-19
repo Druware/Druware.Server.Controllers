@@ -13,9 +13,12 @@ namespace Druware.Server.Controllers
         [HttpGet("encode/{value}")]
         public ActionResult<Result> Encrypt(string value)
         {
-            return (Assembly.GetEntryAssembly()?.GetName().Name == null) ?
-                Ok(Result.Error("No Assembly Found")) :
-                Ok(Result.Ok(value.Encrypt(Assembly.GetEntryAssembly()!.GetName().Name!)));
+            var name = Assembly.GetEntryAssembly()!.GetName()
+                .Name ?? "Druware.Server.Controllers";
+            return (Assembly.GetEntryAssembly()?.GetName().Name == null)
+                ? Ok(Result.Error("No Assembly Found"))
+                : Ok(Result.Ok(
+                    value.Encrypt(name, "4D584868CCA84221823D53D80DB30FCB")));
         }
         
         [HttpGet("")]
@@ -30,4 +33,3 @@ namespace Druware.Server.Controllers
         }
     }
 }
-

@@ -1,11 +1,11 @@
 <package >
     <metadata>
         <id>$id$</id>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
         <title>Druware.Server.Controllers</title>
         <authors>dru@druware.com</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <license type="file">LICENSE.md</license>
+        <license type="file">LICENSE.txt</license>
         <readme>README.md</readme>
         <!-- <icon>icon.png</icon> -->
         <projectUrl>https://github.com/Druware/Druware.Server.Controllers</projectUrl>
@@ -26,7 +26,7 @@
         <tags>.net8 webapi</tags>
     </metadata>
     <files>
-        <file src=".\LICENSE.md" target="" />
-        <file src=".\README.md" target="" />
+        <file src="..\LICENSE.txt" target="" />
+        <file src="..\README.md" target="" />
     </files>
 </package>
