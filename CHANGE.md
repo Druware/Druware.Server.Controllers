@@ -1,5 +1,13 @@
 # Change Log
 
+## 2026-01-02
+
+* removed old .nuspec model
+* migrated to .csproj
+* updated nuget packages
+* fixed a bug in profileController->mfa handling
+* updated build script tp push to satori and nuget
+
 ## 2025/09/19—Release 1.1.1
 
 * Rearranged Project Layout

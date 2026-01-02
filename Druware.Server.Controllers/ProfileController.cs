@@ -1,5 +1,6 @@
 using System.Web;
 using Druware.Server.Entities;
+using Druware.Server.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -87,17 +88,15 @@ namespace Druware.Server.Controllers;
                     user, UserManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
      
                 await UserManager.SetTwoFactorEnabledAsync(user, true);
-     
-                var result = new MfaAuthenicator
-                {
-                    Status = "Success",
-                    Message = "Your authenticator app has been verified",
-                };
+
+                var result = new Dictionary<string, string>();
+                result.Add("Status", is2FaTokenValid ? "Success" : "Failed");
+                result.Add("Message", is2FaTokenValid ? "Your authenticator app has been verified" : "Invalid Code");
      
                 if (await UserManager.CountRecoveryCodesAsync(user) != 0) return Ok(result);
      
                 var recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
-                result.RecoveryCodes = recoveryCodes?.ToArray() ?? [];
+                result.Add("RecoveryCodes", string.Join(",", recoveryCodes));
                 return Ok(result);
             }
             catch (Exception exc)
