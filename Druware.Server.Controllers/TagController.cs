@@ -32,7 +32,7 @@ namespace Druware.Server.Controllers
     /// the various Druware.Server.* libraries.
     /// </summary>
     [Route("api/[controller]")]
-    //[Route("[controller]")]
+    [Route("[controller]")]
     public class TagController : CustomController
     {
         public TagController(

@@ -8,14 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db13e7ea-6fb8-4043-8f77-6b60e04ab2ec" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Druware.Server.Controllers/.idea/AndroidProjectSystem.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Druware.Server.Controllers/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Druware.Server.Controllers/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGE.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/Druware.Server.Controllers.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers/Druware.Server.Controllers.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/Druware.Server.Controllers.nuspec" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/LoginController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers/LoginController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/ProfileController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers/ProfileController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/build-package-and-publish.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/build-package-and-publish.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/TagController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers/TagController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +18,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="39" />
+    <option name="cachedIndexableFilesCount" value="1" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -53,24 +48,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "junie.onboarding.icon.badge.shown": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecapSpentCounter">
+    <option name="endsOfQuotaMs" value="1768230031973" />
+    <option name="spentUsd" value="0.0073693004" />
+  </component>
+  <component name="RecapUselessUpdatesCounter">
+    <option name="suspendCountdown" value="8" />
+  </component>
   <component name="RunManager">
     <configuration name="UnitTests: DebugRoslynAnalyzers" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/UnitTests/UnitTests/UnitTests.csproj" />
@@ -101,6 +103,9 @@
       <workItem from="1765238570941" duration="7839000" />
       <workItem from="1765333624392" duration="599000" />
       <workItem from="1767381647240" duration="791000" />
+      <workItem from="1767382457786" duration="23000" />
+      <workItem from="1767755793289" duration="746000" />
+      <workItem from="1768155081781" duration="871000" />
     </task>
     <servers />
   </component>

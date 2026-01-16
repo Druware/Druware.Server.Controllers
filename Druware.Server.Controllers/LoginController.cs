@@ -77,7 +77,7 @@ public class PasswordResetModel
 
 
 [Route("api/[controller]")]
-// [Route("[controller]")]
+[Route("[controller]")]
 public class LoginController(
     IConfiguration configuration,
     UserManager<User> userManager,
