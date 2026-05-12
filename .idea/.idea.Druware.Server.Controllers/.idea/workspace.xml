@@ -8,9 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db13e7ea-6fb8-4043-8f77-6b60e04ab2ec" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Druware.Server.Controllers/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Druware.Server.Controllers/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/LoginController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers/LoginController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/TagController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers/TagController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Druware.Server.Controllers/NewsletterController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,7 +16,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1" />
+    <option name="cachedIndexableFilesCount" value="5" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -36,6 +34,9 @@
     &quot;accountId&quot;: &quot;d3180f41-4903-4ba6-83e5-59ee8c407f09&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Druware.Server.Controllers/NewsletterController.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -106,6 +107,7 @@
       <workItem from="1767382457786" duration="23000" />
       <workItem from="1767755793289" duration="746000" />
       <workItem from="1768155081781" duration="871000" />
+      <workItem from="1778610942249" duration="361000" />
     </task>
     <servers />
   </component>
