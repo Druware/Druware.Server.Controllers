@@ -7,7 +7,7 @@
 
     <!-- Package Information -->
     <PackageId>Druware.Server.Controllers</PackageId>
-    <Version>1.1.11</Version>
+    <Version>1.1.17</Version>
     <Title>Druware.Server.Controllers</Title>
     <PackageTags>net6 net8 webapi</PackageTags>
     <Description>
@@ -35,7 +35,7 @@
   
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.0" />
-    <PackageReference Include="Druware.Server" Version="1.1.*" />
+    <PackageReference Include="Druware.Server" Version="1.1.10" />
     <PackageReference Include="Druware.Extensions" Version="1.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />

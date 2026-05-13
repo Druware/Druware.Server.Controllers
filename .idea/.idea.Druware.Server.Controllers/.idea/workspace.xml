@@ -8,7 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db13e7ea-6fb8-4043-8f77-6b60e04ab2ec" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Druware.Server.Controllers/NewsletterController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Druware.Server.Controllers/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Druware.Server.Controllers/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/Druware.Server.Controllers.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers/Druware.Server.Controllers.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/NewsletterController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers/NewsletterController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,7 +18,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="5" />
+    <option name="cachedIndexableFilesCount" value="7" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -63,16 +65,17 @@
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;RiderNuGetOptionsPageId&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecapSpentCounter">
-    <option name="endsOfQuotaMs" value="1768230031973" />
-    <option name="spentUsd" value="0.0073693004" />
+    <option name="endsOfQuotaMs" value="1781190060488" />
+    <option name="spentUsd" value="0.0967073" />
   </component>
   <component name="RecapUselessUpdatesCounter">
-    <option name="suspendCountdown" value="8" />
+    <option name="suspendCountdown" value="0" />
   </component>
   <component name="RunManager">
     <configuration name="UnitTests: DebugRoslynAnalyzers" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
@@ -107,7 +110,8 @@
       <workItem from="1767382457786" duration="23000" />
       <workItem from="1767755793289" duration="746000" />
       <workItem from="1768155081781" duration="871000" />
-      <workItem from="1778610942249" duration="361000" />
+      <workItem from="1778610942249" duration="5249000" />
+      <workItem from="1778624779237" duration="1990000" />
     </task>
     <servers />
   </component>

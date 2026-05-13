@@ -101,6 +101,7 @@ namespace Druware.Server.Controllers
             var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(apiKey));
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic", token);
+            Console.WriteLine($"MailJet API Key configured. {token}");
         }
 
         private async Task<ActionResult<Result>> UpdateSubscription(
