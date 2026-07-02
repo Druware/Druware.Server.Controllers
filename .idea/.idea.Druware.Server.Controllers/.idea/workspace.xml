@@ -6,11 +6,16 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="db13e7ea-6fb8-4043-8f77-6b60e04ab2ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Druware.Server.Controllers/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Druware.Server.Controllers/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/Druware.Server.Controllers.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers/Druware.Server.Controllers.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/NewsletterController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers/NewsletterController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,7 +23,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="7" />
+    <option name="cachedIndexableFilesCount" value="4" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -43,6 +48,65 @@
     <commands />
     <urls />
   </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0059307199687972" />
+      <entry key="MS500" value="2.474520429710851" />
+      <entry key="S2" value="9.807937705328744" />
+      <entry key="S5" value="20.543015503764302" />
+      <entry key="S10" value="34.77794064328623" />
+      <entry key="S30" value="78.41416465124513" />
+      <entry key="S60" value="127.55743772144572" />
+      <entry key="M2" value="186.25388796046445" />
+      <entry key="M5" value="248.8848463702807" />
+      <entry key="M10" value="277.3713671203303" />
+      <entry key="M15" value="287.9609612486905" />
+      <entry key="M30" value="299.1573167661236" />
+      <entry key="H1" value="304.99528968498487" />
+      <entry key="H2" value="307.976470924621" />
+      <entry key="H4" value="309.4828999039368" />
+      <entry key="D1" value="310.7464053339168" />
+      <entry key="W1" value="310.9637539070896" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.978385077246594" />
+      <entry key="MS500" value="2.4597562211629906" />
+      <entry key="S2" value="9.794367689187792" />
+      <entry key="S5" value="20.532104591746908" />
+      <entry key="S10" value="34.76891668478283" />
+      <entry key="S30" value="78.40725811013604" />
+      <entry key="S60" value="127.55071985579558" />
+      <entry key="M2" value="186.24789514700436" />
+      <entry key="M5" value="248.88111987458234" />
+      <entry key="M10" value="277.36917710121327" />
+      <entry key="M15" value="287.9594181345958" />
+      <entry key="M30" value="299.15650070570206" />
+      <entry key="H1" value="304.99486994095247" />
+      <entry key="H2" value="307.9762580474901" />
+      <entry key="H4" value="309.48279270430584" />
+      <entry key="D1" value="310.74638736076747" />
+      <entry key="W1" value="310.9637513368763" />
+    </decayedShown>
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -57,8 +121,12 @@
     &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
@@ -94,6 +162,22 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="UnitTests: DebugRoslynAnalyzers" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
+      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/UnitTests/UnitTests/UnitTests.csproj" />
+      <option name="LAUNCH_PROFILE_TFM" value=".NETStandard,Version=v2.0" />
+      <option name="LAUNCH_PROFILE_NAME" value="DebugRoslynAnalyzers" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
+      <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
+      <option name="SEND_DEBUG_REQUEST" value="1" />
+      <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
+      <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -112,6 +196,8 @@
       <workItem from="1768155081781" duration="871000" />
       <workItem from="1778610942249" duration="5249000" />
       <workItem from="1778624779237" duration="1990000" />
+      <workItem from="1783005606857" duration="64000" />
+      <workItem from="1783016811619" duration="930000" />
     </task>
     <servers />
   </component>
