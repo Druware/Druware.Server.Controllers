@@ -1,5 +1,16 @@
 # Change Log
 
+## 2026-07-13
+
+* replaced all SMTP/MailKit mail sending with Azure Communication Services
+  ( new AzureMailHelper )
+* the mail connection string is now taken from the
+  COMMUNICATION_SERVICES_CONNECTION_STRING environment variable so that the
+  secret can be kept out of appsettings.json. The API:Mail:Azure:ConnectionString
+  setting is still honoured as a deprecated fallback, but the environment
+  variable takes precedence.
+* dropped the direct MailKit dependency
+
 ## 2026-01-02
 
 * removed old .nuspec model

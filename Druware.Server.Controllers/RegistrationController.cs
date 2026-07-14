@@ -25,7 +25,6 @@ using RESTfulFoundation.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System.Reflection;
 using System.Web;
 using Microsoft.AspNetCore.Routing;
 
@@ -135,8 +134,6 @@ namespace Druware.Server.Controllers
         {
             await UpdateAccessLog("POST");
 
-            if (_settings.Smtp == null) throw new Exception("Mail Services Not  Configured");
-
             if (!ModelState.IsValid)
                 return Ok(Result.Error("Invalid Model Received"));
 
@@ -166,23 +163,21 @@ namespace Druware.Server.Controllers
             // TODO: Flesh this out to provide a nice email for confirmation,
             //       preferably with multiple output formats ( templaste loaded
             //       from resources perhaps )
-            if (Assembly.GetEntryAssembly()?.GetName()?.Name == null)
-                return Ok(Result.Error("Assembly Not Found"));
             if (_settings.Notification == null)
                 return Ok(Result.Error("Settings Not Found"));
-            
+
             Console.WriteLine(link);
-            #if DEBUG
-            Console.WriteLine(Assembly.GetEntryAssembly()!.GetName()!.Name!);
-            #endif
-            
-            var helper = new MailHelper(_settings.Smtp, Assembly.GetEntryAssembly()!.GetName()!.Name!);
+
+            var helper = new AzureMailHelper(Configuration);
+            if (!helper.IsConfigured)
+                throw new Exception("Mail Services Not  Configured");
+
             await helper.SendAsync(
-                user.Email,
+                user.Email!,
                 _settings.Notification!.From!,
                 _settings.Notification!.From!,
                 "Confirmation email link",
-                link!
+                link
             );
             Console.WriteLine("Mail Sent");
 

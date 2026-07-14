@@ -19,7 +19,6 @@
  */
 
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 using System.Web;
 using RESTfulFoundation.Server;
 using Druware.Server.Entities;
@@ -163,27 +162,22 @@ public class LoginController(
 
             if (selectedProvider != "Email")
                 return Ok(LoginResult.Ok(true));
-            if (_settings.Smtp == null)
+
+            var helper = new AzureMailHelper(configuration);
+            if (!helper.IsConfigured)
                 throw new Exception("Mail Services Not Configured");
 
             var link = $"token={HttpUtility.UrlEncode(token)}";
 
-            if (Assembly.GetEntryAssembly()?.GetName().Name == null)
-                return Ok(
-                    Result.Error("Assembly Not Found"));
             if (_settings.Notification == null)
                 return Ok(
                     Result.Error("Settings Not Found"));
 
-            // get the assembly name from the entry assembly
-            var assemblyName = Assembly.GetEntryAssembly()?.GetName().Name ??
-                               "Druware.Server.API";
-            var helper = new MailHelper(_settings.Smtp, assemblyName);
             if (user.Email != null)
-                helper.Send(
+                await helper.SendAsync(
                     user.Email,
-                    _settings.Notification.From,
-                    _settings.Notification.From,
+                    _settings.Notification.From!,
+                    _settings.Notification.From!,
                     "Two Factor Authentication Code",
                     link
                 );
@@ -284,29 +278,24 @@ public class LoginController(
         // build out the email message to the registered email with the
         // confirmation link that provides the path to confirm the email.
 
-        if (_settings.Smtp == null)
+        var helper = new AzureMailHelper(configuration);
+        if (!helper.IsConfigured)
             throw new Exception("Mail Services Not  Configured");
 
         var link = string.Format("{0}?email={2}&token={1}",
             _settings.ConfirmationUrl, HttpUtility.UrlEncode(token),
             user.Email);
 
-        if (Assembly.GetEntryAssembly()?.GetName()?.Name == null)
-            return Ok(Result.Error("Assembly Not Found"));
         if (_settings.Notification == null)
             return Ok(Result.Error("Settings Not Found"));
 
-
-        var assemblyName = Assembly.GetEntryAssembly()?.GetName().Name ??
-                           "Druware.Server.API";
-        var helper = new MailHelper(_settings.Smtp, assemblyName);
         if (user.Email != null)
-            helper.Send(
+            await helper.SendAsync(
                 user.Email,
-                _settings.Notification.From,
-                _settings.Notification.From,
+                _settings.Notification.From!,
+                _settings.Notification.From!,
                 "Password reset email link",
-                link!
+                link
             );
 
         Console.WriteLine($"Token: {token}");

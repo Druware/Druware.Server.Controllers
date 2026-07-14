@@ -20,11 +20,47 @@ Full documentation is 'slowly' coming together in the 'docs' folder.
 - Druware.Extensions
 - Druware.Server
 - RESTfulFoundation
-- MailKit
+- Azure.Communication.Email
 - Microsoft.AspNetCore.Identity
 - Microsoft.AspNetCore.Identity.EntityFramework
 - Microsoft.Extensions.Configuration
 - Microsoft.Extensions.Configuration.Binder
+
+## Mail Configuration
+
+All outbound mail ( registration confirmation, password reset, and the MFA
+code ) is delivered through Azure Communication Services rather than SMTP.
+
+The connection string is a secret and is supplied through the environment, so
+that it never lands in a checked in appsettings.json:
+
+```shell
+export COMMUNICATION_SERVICES_CONNECTION_STRING="endpoint=https://<resource>.communication.azure.com/;accesskey=<key>"
+```
+
+On Azure App Service this is set as an application setting of the same name.
+`API__Mail__Azure__ConnectionString` also works, as the configuration provider
+maps it onto the `API:Mail:Azure:ConnectionString` key.
+
+The `API:Mail:Azure:ConnectionString` value in appsettings.json is still read
+as a last resort for existing deployments, but it is deprecated and should be
+removed from appsettings.json in favour of the environment variable. The
+environment variable wins when both are present.
+
+The non-secret settings remain in appsettings.json:
+
+```json
+{
+  "API": {
+    "Notification": {
+      "From": "DoNotReply@<verified-domain>"
+    }
+  }
+}
+```
+
+The `API:Notification:From` address must be a sender address on a domain that
+is verified/connected to the Communication Services resource.
 
 ## History
 
