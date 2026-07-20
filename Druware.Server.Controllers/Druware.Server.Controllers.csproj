@@ -7,7 +7,7 @@
 
     <!-- Package Information -->
     <PackageId>Druware.Server.Controllers</PackageId>
-    <Version>1.1.19</Version>
+    <Version>1.1.20</Version>
     <Title>Druware.Server.Controllers</Title>
     <PackageTags>net6 net8 webapi</PackageTags>
     <Description>
@@ -35,9 +35,8 @@
   
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.0" />
-    <PackageReference Include="Azure.Communication.Email" Version="1.1.0" />
-    <PackageReference Include="Druware.Server" Version="1.1.10" />
-    <PackageReference Include="Druware.Extensions" Version="1.1.6" />
+    <PackageReference Include="Druware.Server" Version="1.1.12" />
+    <PackageReference Include="Druware.Extensions" Version="1.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />

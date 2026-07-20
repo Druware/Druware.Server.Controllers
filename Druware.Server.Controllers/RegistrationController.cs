@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Web;
 using Microsoft.AspNetCore.Routing;
+using Druware.Server.Email;
 
 namespace Druware.Server.Controllers
 {
@@ -37,17 +38,23 @@ namespace Druware.Server.Controllers
     {
         private readonly IMapper _mapper;
         private readonly AppSettings _settings;
+        private readonly IEmailSender _emailSender;
+        private readonly IRegistrationConfirmationEmailFactory _confirmationEmailFactory;
 
         public RegistrationController(
             IConfiguration configuration,
             IMapper mapper,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            ServerContext context)
+            ServerContext context,
+            IEmailSender emailSender,
+            IRegistrationConfirmationEmailFactory confirmationEmailFactory)
             : base(configuration, userManager, signInManager, context)
         {
             _settings = new AppSettings(Configuration);
             _mapper = mapper;
+            _emailSender = emailSender;
+            _confirmationEmailFactory = confirmationEmailFactory;
         }
 
         /// <summary>
@@ -160,26 +167,15 @@ namespace Druware.Server.Controllers
                 HttpUtility.UrlEncode(token),
                 user.Email);
 
-            // TODO: Flesh this out to provide a nice email for confirmation,
-            //       preferably with multiple output formats ( templaste loaded
-            //       from resources perhaps )
-            if (_settings.Notification == null)
-                return Ok(Result.Error("Settings Not Found"));
-
-            Console.WriteLine(link);
-
-            var helper = new AzureMailHelper(Configuration);
-            if (!helper.IsConfigured)
+            if (!_emailSender.IsConfigured)
                 throw new Exception("Mail Services Not  Configured");
 
-            await helper.SendAsync(
-                user.Email!,
-                _settings.Notification!.From!,
-                _settings.Notification!.From!,
-                "Confirmation email link",
-                link
-            );
-            Console.WriteLine("Mail Sent");
+            var message = _confirmationEmailFactory.Create(user, link);
+            var sendResult = await _emailSender.SendAsync(
+                message, HttpContext.RequestAborted);
+            if (!sendResult.Succeeded)
+                Console.Error.WriteLine(
+                    $"Unable to send registration confirmation email: {sendResult.ErrorMessage}");
 
             await UserManager.AddToRoleAsync(user, UserSecurityRole.Unconfirmed.ToUpper());
 

@@ -20,7 +20,6 @@ Full documentation is 'slowly' coming together in the 'docs' folder.
 - Druware.Extensions
 - Druware.Server
 - RESTfulFoundation
-- Azure.Communication.Email
 - Microsoft.AspNetCore.Identity
 - Microsoft.AspNetCore.Identity.EntityFramework
 - Microsoft.Extensions.Configuration
@@ -28,8 +27,31 @@ Full documentation is 'slowly' coming together in the 'docs' folder.
 
 ## Mail Configuration
 
-All outbound mail ( registration confirmation, password reset, and the MFA
-code ) is delivered through Azure Communication Services rather than SMTP.
+Account email ( registration confirmation, password reset, and the MFA code )
+is sent through `Druware.Server.Email.IEmailSender`. The Azure Communication
+Services implementation is provided by Druware.Server; this controller package
+no longer creates an Azure client or reads connection strings itself.
+
+Register the shared sender and the default controller services at startup:
+
+```csharp
+builder.Services.AddDruwareAzureEmail(builder.Configuration);
+builder.Services.AddDruwareServerControllers();
+```
+
+The default registration confirmation message retains the original Druware
+subject and plain-text confirmation link. Applications can preserve their own
+branded email by implementing `IRegistrationConfirmationEmailFactory` and
+registering it before `AddDruwareServerControllers`:
+
+```csharp
+builder.Services.AddSingleton<IRegistrationConfirmationEmailFactory,
+    BrandedRegistrationConfirmationEmailFactory>();
+builder.Services.AddDruwareServerControllers();
+```
+
+Both public registration and administrator-created accounts use this factory,
+and each account creation sends only the single message it produces.
 
 The connection string is a secret and is supplied through the environment, so
 that it never lands in a checked in appsettings.json:
@@ -52,15 +74,18 @@ The non-secret settings remain in appsettings.json:
 ```json
 {
   "API": {
-    "Notification": {
-      "From": "DoNotReply@<verified-domain>"
+    "Mail": {
+      "Azure": {
+        "SenderAddress": "DoNotReply@<verified-domain>"
+      }
     }
   }
 }
 ```
 
-The `API:Notification:From` address must be a sender address on a domain that
-is verified/connected to the Communication Services resource.
+The configured sender address must be a sender on a domain that is
+verified/connected to the Communication Services resource. The legacy
+`API:Notification:From` setting remains available as a fallback.
 
 ## History
 

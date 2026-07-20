@@ -28,6 +28,7 @@ using Microsoft.Extensions.Configuration;
 using System.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Druware.Server.Email;
 
 namespace Druware.Server.Controllers;
 
@@ -38,6 +39,8 @@ public class UserController : CustomController
     // private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
     private readonly RoleManager<Role> _roleManager;
+    private readonly IEmailSender _emailSender;
+    private readonly IRegistrationConfirmationEmailFactory _confirmationEmailFactory;
 
     private readonly AppSettings _settings;
 
@@ -47,12 +50,16 @@ public class UserController : CustomController
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
         SignInManager<User> signInManager,
-        ServerContext context)
+        ServerContext context,
+        IEmailSender emailSender,
+        IRegistrationConfirmationEmailFactory confirmationEmailFactory)
         : base(configuration, userManager, signInManager, context)
     {
         _settings = new AppSettings(Configuration);
         _mapper = mapper;
         _roleManager = roleManager;
+        _emailSender = emailSender;
+        _confirmationEmailFactory = confirmationEmailFactory;
     }
 
     #region Base
@@ -151,26 +158,20 @@ public class UserController : CustomController
             // build out the email message to the registered email with the
             // confirmation link that provides the path to confirm the email.
 
-            var helper = new AzureMailHelper(Configuration);
-            if (!helper.IsConfigured) throw new Exception("Mail Services Not  Configured");
+            if (!_emailSender.IsConfigured)
+                throw new Exception("Mail Services Not  Configured");
 
             var link = string.Format("{0}?email={2}&token={1}",
                 _settings.ConfirmationUrl,
                 HttpUtility.UrlEncode(token),
                 user.Email);
 
-            // TODO: Flesh this out to provide a nice email for confirmation,
-            //       preferably with multiple output formats ( templaste loaded from resources perhaps )
-            if (_settings.Notification == null)
-                return Ok(Result.Error("Settings Not Found"));
-
-            await helper.SendAsync(
-                user.Email!,
-                _settings.Notification.From!,
-                _settings.Notification.From!,
-                "Confirmation email link",
-                link
-            );
+            var message = _confirmationEmailFactory.Create(user, link);
+            var sendResult = await _emailSender.SendAsync(
+                message, HttpContext.RequestAborted);
+            if (!sendResult.Succeeded)
+                Console.Error.WriteLine(
+                    $"Unable to send user confirmation email: {sendResult.ErrorMessage}");
 
             await UserManager.AddToRoleAsync(user, UserSecurityRole.Unconfirmed.ToUpper());
 

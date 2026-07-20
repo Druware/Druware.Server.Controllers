@@ -1,5 +1,17 @@
 # Change Log
 
+## 2026-07-20 - Release 1.1.20
+
+* routed registration, administrator-created account, password reset, and MFA
+  email through `Druware.Server.Email.IEmailSender`
+* added `IRegistrationConfirmationEmailFactory` so applications can provide
+  branded registration messages without sending a second email
+* added the original plain-text confirmation message as the default factory
+* converted `AzureMailHelper` to an obsolete compatibility adapter over the
+  shared email sender
+* moved the Azure SDK dependency into Druware.Server and updated the dependency
+  to Druware.Server 1.1.12
+
 ## 2026-07-13
 
 * replaced all SMTP/MailKit mail sending with Azure Communication Services

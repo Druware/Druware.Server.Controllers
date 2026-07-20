@@ -26,6 +26,7 @@ using Druware.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Druware.Server.Email;
 
 namespace Druware.Server.Controllers;
 
@@ -81,7 +82,8 @@ public class LoginController(
     IConfiguration configuration,
     UserManager<User> userManager,
     SignInManager<User> signInManager,
-    ServerContext context)
+    ServerContext context,
+    IEmailSender emailSender)
     : CustomController(configuration, userManager, signInManager, context)
 {
     private readonly AppSettings _settings = new(configuration);
@@ -163,24 +165,25 @@ public class LoginController(
             if (selectedProvider != "Email")
                 return Ok(LoginResult.Ok(true));
 
-            var helper = new AzureMailHelper(configuration);
-            if (!helper.IsConfigured)
+            if (!emailSender.IsConfigured)
                 throw new Exception("Mail Services Not Configured");
 
             var link = $"token={HttpUtility.UrlEncode(token)}";
 
-            if (_settings.Notification == null)
-                return Ok(
-                    Result.Error("Settings Not Found"));
-
             if (user.Email != null)
-                await helper.SendAsync(
-                    user.Email,
-                    _settings.Notification.From!,
-                    _settings.Notification.From!,
-                    "Two Factor Authentication Code",
-                    link
-                );
+            {
+                var sendResult = await emailSender.SendAsync(
+                    new EmailMessage
+                    {
+                        To = { new EmailRecipient(user.Email) },
+                        Subject = "Two Factor Authentication Code",
+                        PlainTextBody = link
+                    },
+                    HttpContext.RequestAborted);
+                if (!sendResult.Succeeded)
+                    Console.Error.WriteLine(
+                        $"Unable to send two-factor authentication email: {sendResult.ErrorMessage}");
+            }
 
             return Ok(LoginResult.Ok(true));
         }
@@ -278,25 +281,27 @@ public class LoginController(
         // build out the email message to the registered email with the
         // confirmation link that provides the path to confirm the email.
 
-        var helper = new AzureMailHelper(configuration);
-        if (!helper.IsConfigured)
+        if (!emailSender.IsConfigured)
             throw new Exception("Mail Services Not  Configured");
 
         var link = string.Format("{0}?email={2}&token={1}",
             _settings.ConfirmationUrl, HttpUtility.UrlEncode(token),
             user.Email);
 
-        if (_settings.Notification == null)
-            return Ok(Result.Error("Settings Not Found"));
-
         if (user.Email != null)
-            await helper.SendAsync(
-                user.Email,
-                _settings.Notification.From!,
-                _settings.Notification.From!,
-                "Password reset email link",
-                link
-            );
+        {
+            var sendResult = await emailSender.SendAsync(
+                new EmailMessage
+                {
+                    To = { new EmailRecipient(user.Email) },
+                    Subject = "Password reset email link",
+                    PlainTextBody = link
+                },
+                HttpContext.RequestAborted);
+            if (!sendResult.Succeeded)
+                Console.Error.WriteLine(
+                    $"Unable to send password reset email: {sendResult.ErrorMessage}");
+        }
 
         Console.WriteLine($"Token: {token}");
         return Ok(Result.Ok("Your password reset request has been started. - " +

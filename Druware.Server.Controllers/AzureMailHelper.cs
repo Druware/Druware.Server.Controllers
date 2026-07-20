@@ -14,96 +14,79 @@
  * the Druware.Server API Library. If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright 2019-2026 by:
- *    Andy 'Dru' Satori @ Satori & Associates, Inc.
+ *    Andy 'Dru' Satori @ Druware Software Designs.
  *    All Rights Reserved
  */
 
 using System.Text.RegularExpressions;
-using Azure;
-using Azure.Communication.Email;
+using Druware.Server.Email;
 using Microsoft.Extensions.Configuration;
 
 namespace Druware.Server.Controllers;
 
 /// <summary>
-/// Sends mail through the Azure Communication Services Email API, replacing
-/// the SMTP based MailHelper that shipped with Druware.Server.
-///
-/// The connection string is a secret, and belongs in the environment rather
-/// than in appsettings.json. It is resolved, in order, from:
-///   1. The COMMUNICATION_SERVICES_CONNECTION_STRING environment variable
-///      ( the name used by Azure App Service )
-///   2. The API__Mail__Azure__ConnectionString environment variable, which the
-///      configuration provider surfaces as API:Mail:Azure:ConnectionString
-///   3. The API:Mail:Azure:ConnectionString configuration key, retained only
-///      so existing appsettings.json based deployments keep working
+/// Compatibility wrapper for callers that previously used the controller
+/// package's Azure-specific helper directly. New code should depend on
+/// <see cref="IEmailSender"/>.
 /// </summary>
-public class AzureMailHelper
+[Obsolete("Inject Druware.Server.Email.IEmailSender instead.")]
+public class AzureMailHelper(IEmailSender emailSender)
 {
-    public const string ConnectionStringKey = "API:Mail:Azure:ConnectionString";
+    public const string ConnectionStringKey =
+        AzureCommunicationEmailSender.ConnectionStringKey;
     public const string ConnectionStringEnvironmentKey =
-        "COMMUNICATION_SERVICES_CONNECTION_STRING";
-
-    private readonly EmailClient? _client;
+        AzureCommunicationEmailSender.ConnectionStringEnvironmentKey;
 
     public AzureMailHelper(IConfiguration configuration)
+        : this(new AzureCommunicationEmailSender(configuration))
     {
-        var connectionString =
-            Environment.GetEnvironmentVariable(ConnectionStringEnvironmentKey)
-            ?? configuration.GetValue<string>(ConnectionStringKey);
-
-        if (!string.IsNullOrWhiteSpace(connectionString))
-            _client = new EmailClient(connectionString);
     }
 
-    /// <summary>
-    /// True when a connection string was found, and mail can be delivered.
-    /// </summary>
-    public bool IsConfigured => _client != null;
+    public bool IsConfigured => emailSender.IsConfigured;
 
     public async Task SendAsync(string to, string from, string replyTo,
         string subject, string body)
     {
-        var content = new EmailContent(subject) { PlainText = body };
-        await SendAsync(to, from, replyTo, content);
+        var result = await emailSender.SendAsync(CreateMessage(
+            to, replyTo, subject, null, body));
+        LogIfFailed(result);
     }
 
     public async Task SendHtmlAsync(string to, string from, string replyTo,
         string subject, string htmlBody, string? plainTextBody = null)
     {
-        var content = new EmailContent(subject)
-        {
-            Html = htmlBody,
-            PlainText = plainTextBody ?? StripHtmlTags(htmlBody)
-        };
-        await SendAsync(to, from, replyTo, content);
+        var result = await emailSender.SendAsync(CreateMessage(
+            to,
+            replyTo,
+            subject,
+            htmlBody,
+            plainTextBody ?? StripHtmlTags(htmlBody)));
+        LogIfFailed(result);
     }
 
-    private async Task SendAsync(string to, string from, string replyTo,
-        EmailContent content)
+    private static EmailMessage CreateMessage(string to, string replyTo,
+        string subject, string? htmlBody, string? plainTextBody)
     {
-        if (_client == null)
-            throw new InvalidOperationException(
-                "Azure Communication Services mail is not configured. Set the " +
-                $"{ConnectionStringEnvironmentKey} environment variable.");
-
-        var message = new EmailMessage(
-            from,
-            new EmailRecipients(new List<EmailAddress> { new(to) }),
-            content);
+        var message = new EmailMessage
+        {
+            To = { new EmailRecipient(to) },
+            Subject = subject,
+            HtmlBody = htmlBody,
+            PlainTextBody = plainTextBody
+        };
 
         if (!string.IsNullOrWhiteSpace(replyTo))
-            message.ReplyTo.Add(new EmailAddress(replyTo));
+            message.ReplyTo.Add(new EmailRecipient(replyTo));
 
-        try
-        {
-            await _client.SendAsync(WaitUntil.Completed, message);
-        }
-        catch (RequestFailedException e)
-        {
+        return message;
+    }
+
+    private static void LogIfFailed(EmailSendResult result)
+    {
+        if (!result.Succeeded)
             Console.Error.WriteLine(
-                $"An Error Occurred while trying to send an email: {e.Message}");
-        }
+                $"An error occurred while trying to send an email: " +
+                (result.ErrorMessage ?? "Unable to send email."));
     }
 
     private static string StripHtmlTags(string html) =>
