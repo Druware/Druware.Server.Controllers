@@ -15,7 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="db13e7ea-6fb8-4043-8f77-6b60e04ab2ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Druware.Server.Controllers/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Druware.Server.Controllers/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers.sln" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Druware.Server.Controllers/Druware.Server.Controllers.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Druware.Server.Controllers/Druware.Server.Controllers.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,7 +201,7 @@
       <workItem from="1783016811619" duration="930000" />
       <workItem from="1783982374702" duration="860000" />
       <workItem from="1783984822640" duration="2183000" />
-      <workItem from="1784575323317" duration="89000" />
+      <workItem from="1784575323317" duration="4096000" />
     </task>
     <servers />
   </component>
