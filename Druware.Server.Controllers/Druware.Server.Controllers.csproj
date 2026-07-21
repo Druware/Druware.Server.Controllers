@@ -7,7 +7,7 @@
 
     <!-- Package Information -->
     <PackageId>Druware.Server.Controllers</PackageId>
-    <Version>1.1.20</Version>
+    <Version>1.1.21</Version>
     <Title>Druware.Server.Controllers</Title>
     <PackageTags>net6 net8 webapi</PackageTags>
     <Description>
