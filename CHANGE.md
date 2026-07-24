@@ -1,5 +1,20 @@
 # Change Log
 
+## 2026-07-24 - dependency advisories
+
+* Removed the unused `Microsoft.AspNetCore.Server.Kestrel` reference, source of
+  the Critical `Kestrel.Core` advisory. Nothing here referenced it - a web host
+  supplies its own server.
+* Bumped `Microsoft.AspNetCore.Identity` and `Microsoft.AspNetCore.Mvc.Core`
+  from 2.2.x to 2.3.x.
+* The MailKit, MimeKit, Pkcs, SQLitePCLRaw and Cryptography.Xml advisories are
+  cleared by Druware.Server 1.1.16, which this package floats to.
+
+`dotnet list package --vulnerable --include-transitive` now reports nothing.
+
+`Microsoft.AspNetCore.Server.IISIntegration` is deliberately left in place: no
+advisory, and not in the Kestrel dependency chain.
+
 ## 2026-07-24
 
 * **Breaking:** `RegistrationController` and `UserController` no longer take an

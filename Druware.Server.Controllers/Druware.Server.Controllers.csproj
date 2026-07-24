@@ -36,9 +36,8 @@
   <ItemGroup>
     <PackageReference Include="Druware.Server" Version="1.1.*" />
     <PackageReference Include="Druware.Extensions" Version="1.1.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.*" />
     <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.*" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.*" />
