@@ -1,5 +1,19 @@
 # Change Log
 
+## 2026-07-24
+
+* **Breaking:** `RegistrationController` and `UserController` no longer take an
+  `IMapper` constructor parameter. Applications resolving them through DI need
+  no change; anything constructing them directly must drop the argument.
+* Replaced `_mapper.Map<User>(model)` with `UserRegistrationModel.ToUser()`
+  from Druware.Server, and removed the `AutoMapper` package reference. This
+  clears CVE-2026-32933 (uncontrolled recursion / DoS), which the package
+  carried into every consumer.
+* Side effect worth noting: these controllers previously relied on the hosting
+  application registering a `CreateMap<UserRegistrationModel, User>()` profile,
+  an undocumented requirement that silently produced a user with no `UserName`
+  if it was missing. The mapping is now self-contained.
+
 ## 2026-07-20 - Release 1.1.20
 
 * routed registration, administrator-created account, password reset, and MFA

@@ -18,7 +18,6 @@
  *    All Rights Reserved
  */
 
-using AutoMapper;
 using Druware.Server.Entities;
 using Druware.Server.Models;
 using RESTfulFoundation.Server;
@@ -37,7 +36,6 @@ namespace Druware.Server.Controllers;
 public class UserController : CustomController
 {
     // private readonly IConfiguration _configuration;
-    private readonly IMapper _mapper;
     private readonly RoleManager<Role> _roleManager;
     private readonly IEmailSender _emailSender;
     private readonly IRegistrationConfirmationEmailFactory _confirmationEmailFactory;
@@ -46,7 +44,6 @@ public class UserController : CustomController
 
     public UserController(
         IConfiguration configuration,
-        IMapper mapper,
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
         SignInManager<User> signInManager,
@@ -56,7 +53,6 @@ public class UserController : CustomController
         : base(configuration, userManager, signInManager, context)
     {
         _settings = new AppSettings(Configuration);
-        _mapper = mapper;
         _roleManager = roleManager;
         _emailSender = emailSender;
         _confirmationEmailFactory = confirmationEmailFactory;
@@ -142,7 +138,7 @@ public class UserController : CustomController
             if (!ModelState.IsValid)
                 return Ok(Result.Error("Invalid Model Recieved"));
 
-            var user = _mapper.Map<User>(model);
+            var user = model.ToUser();
 
             var result = await UserManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)

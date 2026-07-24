@@ -18,7 +18,6 @@
  *    All Rights Reserved
  */
 
-using AutoMapper;
 using Druware.Server.Entities;
 using Druware.Server.Models;
 using RESTfulFoundation.Server;
@@ -36,14 +35,12 @@ namespace Druware.Server.Controllers
     //[Route("[controller]")]
     public class RegistrationController : CustomController
     {
-        private readonly IMapper _mapper;
         private readonly AppSettings _settings;
         private readonly IEmailSender _emailSender;
         private readonly IRegistrationConfirmationEmailFactory _confirmationEmailFactory;
 
         public RegistrationController(
             IConfiguration configuration,
-            IMapper mapper,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ServerContext context,
@@ -52,7 +49,6 @@ namespace Druware.Server.Controllers
             : base(configuration, userManager, signInManager, context)
         {
             _settings = new AppSettings(Configuration);
-            _mapper = mapper;
             _emailSender = emailSender;
             _confirmationEmailFactory = confirmationEmailFactory;
         }
@@ -144,7 +140,7 @@ namespace Druware.Server.Controllers
             if (!ModelState.IsValid)
                 return Ok(Result.Error("Invalid Model Received"));
 
-            var user = _mapper.Map<User>(model);
+            var user = model.ToUser();
 
             if (model.Password == null) return Ok(Result.Error("Password is required"));
 
