@@ -138,6 +138,9 @@ public class UserController : CustomController
             if (!ModelState.IsValid)
                 return Ok(Result.Error("Invalid Model Recieved"));
 
+            if (model.Password == null)
+                return Ok(Result.Error("Password is required"));
+
             var user = model.ToUser();
 
             var result = await UserManager.CreateAsync(user, model.Password);
@@ -250,9 +253,11 @@ public class UserController : CustomController
             // loop the allRoles to ensure that we add/remove properly
             foreach (var role in allRoles)
             {
+                if (role.Name == null) continue;
+
                 // if the role exists in the userRoles, but not the posted roles
                 // then remove it.
-                if (role.Name != null && !roles.Contains(role.Name) && userRoles.Contains(role.Name))
+                if (!roles.Contains(role.Name) && userRoles.Contains(role.Name))
                     await UserManager.RemoveFromRoleAsync(user, role.Name);
 
                 // if the role exists in the posted roles but not the userRoles

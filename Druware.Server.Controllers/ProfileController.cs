@@ -81,7 +81,9 @@ namespace Druware.Server.Controllers;
             {
                 var user = await UserManager.GetUserAsync(HttpContext.User);
                 if (user == null) return Ok(Result.Error("No User Logged In"));
-                
+                if (verifyAuthenticator.Code == null)
+                    return Ok(Result.Error("No Code Provided"));
+
                 var verificationCode = verifyAuthenticator.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
      
                 var is2FaTokenValid = await UserManager.VerifyTwoFactorTokenAsync(
@@ -96,7 +98,7 @@ namespace Druware.Server.Controllers;
                 if (await UserManager.CountRecoveryCodesAsync(user) != 0) return Ok(result);
      
                 var recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
-                result.Add("RecoveryCodes", string.Join(",", recoveryCodes));
+                result.Add("RecoveryCodes", string.Join(",", recoveryCodes ?? []));
                 return Ok(result);
             }
             catch (Exception exc)
@@ -146,6 +148,7 @@ namespace Druware.Server.Controllers;
             try
             {
                 User? user = await UserManager.GetUserAsync(HttpContext.User);
+                if (user == null) return Ok(Result.Error("No User Logged In"));
                 return (await UserManager.IsInRoleAsync(user, role)) ?
                     Ok(Result.Ok("Granted")) : Ok(Result.Error("Denied"));
             }

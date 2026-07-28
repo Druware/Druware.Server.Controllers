@@ -59,8 +59,8 @@ public class ForgotPasswordModel
 {
     [Required]
     [EmailAddress]
-    public string Email { get; set; }
-}    
+    public string? Email { get; set; }
+}
 
 public class PasswordResetModel
 {
@@ -272,11 +272,11 @@ public class LoginController(
     public async Task<ActionResult<Result>> SendResetRequest(
         [FromQuery] string email)
     {
-        var user = await userManager.FindByEmailAsync(email);
+        var user = await UserManager.FindByEmailAsync(email);
         if (user == null)
             return Ok(
                 Result.Error("Unable to reset this password at this time..."));
-        var token = await userManager.GeneratePasswordResetTokenAsync(user);
+        var token = await UserManager.GeneratePasswordResetTokenAsync(user);
 
         // build out the email message to the registered email with the
         // confirmation link that provides the path to confirm the email.
@@ -312,17 +312,18 @@ public class LoginController(
     public async Task<ActionResult<Result>> ConfirmPasswordReset(
         [FromBody] PasswordResetModel model)
     {
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid || model.Email == null || model.Token == null ||
+            model.Password == null)
             return Ok(Result.Error("Invalid Model Received"));
 
         // Confirm the Email
-        var user = await userManager.FindByEmailAsync(model.Email);
+        var user = await UserManager.FindByEmailAsync(model.Email);
 
         if (user == null)
             return Ok(Result.Error("Cannot Find This Account"));
 
         var resetPassResult =
-            await userManager.ResetPasswordAsync(user, model.Token,
+            await UserManager.ResetPasswordAsync(user, model.Token,
                 model.Password);
         if (resetPassResult.Succeeded)
         {
