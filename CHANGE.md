@@ -1,5 +1,11 @@
 # Change Log
 
+## 2026-11-06 - expired sessions on GET /login/
+
+* `LoginController.Validate` (GET `/login/`) now answers an expired session with `Result.Error("Session has expired, user must log in.")` right after signing the user out. Previously it signed out and then checked `SignInManager.IsSignedIn` against the request's principal, which was still authenticated by the cookie it arrived with, so an expired session could come back as `Result.Ok("")`. The status stays 200, as clients read this body to restore a session at launch; every other path through `Validate` is unchanged.
+* The 401 that other actions now return for an expired session comes from `CustomController.UpdateUserAccess` in Druware.Server 1.1.20, which this package floats to through its `1.1.*` reference. All the actions here that call it return its result.
+* Tests cover `Validate` against a real Identity stack on an in-memory Sqlite `ServerContext`: an expired session returns the expired error and clears the Identity cookie, an active session returns success, and an unknown user still gets "Unable to find User".
+
 ## 2026-07-24 - dependency advisories
 
 * Removed the unused `Microsoft.AspNetCore.Server.Kestrel` reference, source of

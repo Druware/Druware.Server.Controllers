@@ -102,7 +102,13 @@ public class LoginController(
         var user = await Entities.User.ByName(User.Identity?.Name, UserManager);
         if (user == null) return Ok(Result.Error("Unable to find User"));
         if (user.IsSessionExpired())
+        {
+            // the request's principal is still authenticated, so
+            // IsSignedIn below would report it as signed in. Stays a 200 as
+            // clients read this body to restore a session at launch.
             await SignInManager.SignOutAsync();
+            return Ok(Result.Error("Session has expired, user must log in."));
+        }
 
         var currentUser = User;
         return (SignInManager.IsSignedIn(currentUser))
